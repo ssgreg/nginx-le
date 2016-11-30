@@ -7,7 +7,7 @@ OWNER_EMAIL=${OWNER_EMAIL:?should be specified!}
 
 # paths
 SSL_PATH="/etc/nginx/ssl"
-CONFD_PATH="/etc/nginx/conf.d"
+CONFD_PATH="/etc/nginx/conf.d/services"
 WEBROOT_PATH="/usr/share/nginx/html"
 CERT_PATH="$SSL_PATH"/"cert.pem"
 KEY_PATH="$SSL_PATH"/"key.pem"
@@ -65,8 +65,8 @@ RunCertbot()
     # copy artefacts
     if [ ! "$DRY_RUN" ]; then
         path="/etc/letsencrypt/live"/"$OWNER_DOMAIN"
-        cp -fv "$path"/"privkey.pem" "$CERT_PATH"
-        cp -fv "$path"/"fullchain.pem" "$KEY_PATH"
+        cp -fv "$path"/"privkey.pem" "$KEY_PATH"
+        cp -fv "$path"/"fullchain.pem" "$CERT_PATH"
     fi
 }
 
@@ -114,16 +114,16 @@ SafeGetCertificateValidDays()
 
 DisableNginxConfigs()
 {
-    if [ -d "$CERT_PATH" ]; then
-        mv -v "$CERT_PATH" "$CERT_PATH".disabled
+    if [ -d "$CONFD_PATH" ]; then
+        mv -v "$CONFD_PATH" "$CONFD_PATH".disabled
     fi
 }
 
 
 EnableNginxConfigs()
 {
-    if [ -d "$CERT_PATH".disabled ]; then
-        mv -v "$CERT_PATH".disabled "$CERT_PATH"
+    if [ -d "$CONFD_PATH".disabled ]; then
+        mv -v "$CONFD_PATH".disabled "$CONFD_PATH"
     fi
 }
 
