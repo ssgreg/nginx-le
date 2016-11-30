@@ -1,0 +1,28 @@
+version: '2'
+services:
+
+    nginx-le:
+        build: .
+        image: ssgreg/nginx-le:latest
+        hostname: nginx
+        restart: always
+        container_name: nginx
+
+        logging:
+            driver: json-file
+            options:
+                max-size: "10m"
+                max-file: "5"
+
+        volumes:
+            - ./etc/nginx/ssl:/etc/nginx/ssl
+            - ./etc/nginx/conf.d:/etc/nginx/conf.d
+
+        ports:
+            - "80:80"
+            - "443:443"
+
+        environment:
+            - OWNER_EMAIL=example@example.com
+            - OWNER_DOMAIN=example.com
+#            - DRY_RUN=1
